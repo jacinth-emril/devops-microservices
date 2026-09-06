@@ -1,0 +1,31 @@
+name: CI/CD
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Build Docker images
+        run: |
+          docker build -t user-service ./user-service
+          docker build -t product-service ./product-service
+          docker build -t order-service ./order-service
+
+      - name: Trivy scan
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: user-service
+          format: table
+          exit-code: '0'
+          severity: CRITICAL,HIGH
+
+      - name: Build completed
+        run: echo "CI/CD build completed successfully"
