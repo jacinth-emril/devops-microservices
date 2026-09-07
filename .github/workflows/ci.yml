@@ -1,3 +1,4 @@
+```yaml
 name: CI/CD
 
 on:
@@ -27,5 +28,25 @@ jobs:
           exit-code: '0'
           severity: CRITICAL,HIGH
 
-      - name: Login to Amazon ECR
-        uses: aws-actions/amazon-ecr-login@v2
+      - name: Update GitOps manifest
+        run: |
+          git clone https://x-access-token:${{ secrets.GITOPS_TOKEN }}@github.com/jacinth-emril/devops-gitops-manifests.git
+
+          cd devops-gitops-manifests
+
+          sed -i "s|image: .*user-service:.*|image: 554608989879.dkr.ecr.ap-south-1.amazonaws.com/user-service:latest|" user-service/deployment.yaml
+
+          sed -i "s|image: .*product-service:.*|image: 554608989879.dkr.ecr.ap-south-1.amazonaws.com/product-service:latest|" product-service/deployment.yaml
+
+          sed -i "s|image: .*order-service:.*|image: 554608989879.dkr.ecr.ap-south-1.amazonaws.com/order-service:latest|" order-service/deployment.yaml
+
+          git config user.name "github-actions"
+
+          git config user.email "github-actions@github.com"
+
+          git add .
+
+          git commit -m "Update application images" || echo "No changes to commit"
+
+          git push
+```
