@@ -1,4 +1,3 @@
-```yaml
 name: CI/CD
 
 on:
@@ -41,7 +40,6 @@ jobs:
           sed -i "s|image: .*order-service:.*|image: 554608989879.dkr.ecr.ap-south-1.amazonaws.com/order-service:latest|" order-service/deployment.yaml
 
           git config user.name "github-actions"
-
           git config user.email "github-actions@github.com"
 
           git add .
@@ -49,4 +47,3 @@ jobs:
           git commit -m "Update application images" || echo "No changes to commit"
 
           git push
-```
