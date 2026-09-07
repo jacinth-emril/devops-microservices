@@ -27,5 +27,5 @@ jobs:
           exit-code: '0'
           severity: CRITICAL,HIGH
 
-      - name: Build completed
-        run: echo "CI/CD build completed successfully"
+      - name: Login to Amazon ECR
+        uses: aws-actions/amazon-ecr-login@v2
